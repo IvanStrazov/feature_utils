@@ -26,7 +26,7 @@ class _TargetCategoryEncoderSpecialFunction:
     
     
     @staticmethod
-    def _fun_quantile(stat: str):
+    def _fun_quantile(stat: str) -> Callable:
         """
         Расчет квантиля.
         """
@@ -38,7 +38,7 @@ class _TargetCategoryEncoderSpecialFunction:
     
     
     @staticmethod
-    def _fun_iqr(stat: str):
+    def _fun_iqr(stat: str) -> Callable:
         """
         Расчет интерквартильного размаха.
         """
@@ -55,7 +55,7 @@ class _TargetCategoryEncoderSpecialFunction:
     
     
     @staticmethod
-    def _fun_diff(stat: str):
+    def _fun_diff(stat: str) -> Callable:
         """
         Расчет лагов.
         """
@@ -95,7 +95,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     
     
     def _is_transform_stat(self,
-                           stat: str):
+                           stat: str) -> bool:
         """
         Проверка является ли статистика "оконной трансформацией"
         """
@@ -107,7 +107,8 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     
     
     def _stat_to_name_and_fun(self,
-                              stat: str) -> Tuple[str]:
+                              stat: str
+                             ) -> Tuple[str]:
         """
         Определение интеграции отдельных категорий статистик.
         """
@@ -134,7 +135,8 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     @staticmethod
     def _new_feat_names(categories: List[str],
                         target: str,
-                        statistics: Union[str, List[str]]) -> Union[str, List[str]]:
+                        statistics: Union[str, List[str]]
+                       ) -> Union[str, List[str]]:
         """
         Генерация списка названий новых признкаов.
         
