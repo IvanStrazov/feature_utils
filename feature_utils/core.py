@@ -80,6 +80,7 @@ class _TargetCategoryEncoderSpecialFunction:
 
 class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     """
+    Основной класс категориального кодирования таргета.
     """
     
     _default_stats = {"mean", "median", "min", "max", "count", "var", "std", "first", "last"}
@@ -93,8 +94,10 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     _transform_stat_prefixes = {"diff"}
     
     
-    def _is_transform_stat(self, stat):
+    def _is_transform_stat(self,
+                           stat: str):
         """
+        Проверка является ли статистика "оконной трансформацией"
         """
         
         if stat.split("_")[0] in self._transform_stat_prefixes:
@@ -103,8 +106,10 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
             return False
     
     
-    def _stat_to_name_and_fun(self, stat: str) -> Tuple[str]:
+    def _stat_to_name_and_fun(self,
+                              stat: str) -> Tuple[str]:
         """
+        Определение интеграции отдельных категорий статистик.
         """
         
         if stat in self._default_stats:
@@ -127,8 +132,19 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     
     
     @staticmethod
-    def _new_feat_names(categories, target, statistics):
+    def _new_feat_names(categories: List[str],
+                        target: str,
+                        statistics: Union[str, List[str]]): -> Union[str, List[str]]:
         """
+        Генерация списка названий новых признкаов.
+        
+        Параметры:
+            categories (list[str]) - список колонок для группировки
+            targets (list[str]) - список колонок с таргетом
+            statistics (list[str]) - список статистик
+        
+        Возвращает:
+            (str|list[str]) - список новых названий
         """
         
         if isinstance(statistics, tuple):
@@ -146,6 +162,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
                     stat_funs: List[Union[str, Callable]]
                    ):
         """
+        Кодирование агрегатными статистиками.
         """
         
         data_agg = data.groupby(categories).agg({target: stat_funs})
@@ -162,6 +179,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
                           stat_funs: List[Union[str, Callable]]
                          ):
         """
+        Кодирование оконными трансформациями.
         """
         
         for name, fun in zip(stat_names, stat_funs):
@@ -181,17 +199,21 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
                           return_inf: bool = False
                          ):
         """
+        Кодирование категориальных признаков таргетом.
         
         Параметры:
-            data (pandas DataFrame)
-            categories (list[str])
-            targets (list[str])
-            statistics (list[str])
-            sort_order (list[str], def=None)
-            tr_stat_names (bool, def=False)
+            data (pandas DataFrame) - исходные данные
+            categories (list[str]) - список колонок для группировки
+            targets (list[str]) - список колонок с таргетом
+            statistics (list[str]) - список статистик
+            user_stats (dict, def={}) - словарь пользовательских статистик:
+                key (str) - статистика
+                value (function) - функция расчета статистики
+            sort_order (list[str], def=None) - список колонок для сортировки
+            return_inf (bool, def=False) - формат выходных данных
         
         Возвращает:
-            data (pandas DataFrame)
+            data (pandas DataFrame) - выходные данные
         """
         
         _data = copy.deepcopy(data)
@@ -207,7 +229,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
         
         # Обновление словаря "особых" статистик на пользовательские
         if special_stats is not None:
-            self._special_stats.update(special_stats)
+            self._special_stats.update(user_stats)
         
         # Сортировка
         if sort_order is not None:
