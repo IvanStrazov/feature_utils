@@ -134,7 +134,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
     @staticmethod
     def _new_feat_names(categories: List[str],
                         target: str,
-                        statistics: Union[str, List[str]]): -> Union[str, List[str]]:
+                        statistics: Union[str, List[str]]) -> Union[str, List[str]]:
         """
         Генерация списка названий новых признкаов.
         
@@ -194,7 +194,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
                           categories: List[str],
                           targets: List[str],
                           statistics: List[str],
-                          special_stats: dict = {},
+                          user_stats: dict = {},
                           sort_order: Optional[List[str]] = None,
                           return_inf: bool = False
                          ):
@@ -228,7 +228,7 @@ class _TargetCategoryEncoder(_TargetCategoryEncoderSpecialFunction):
         _statistics = set(_statistics)
         
         # Обновление словаря "особых" статистик на пользовательские
-        if special_stats is not None:
+        if user_stats is not None:
             self._special_stats.update(user_stats)
         
         # Сортировка
